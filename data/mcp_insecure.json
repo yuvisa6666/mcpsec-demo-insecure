@@ -1,4 +1,4 @@
-{
+{ 
   "mcpServers": {
     "fs": {
       "command": "npx",
@@ -11,6 +11,7 @@
       "args": ["-y", "mcp-sqlite"],
       "capabilities": ["db.read", "db.write"],
       "auth": { "required": false }
+      
     },
     "github": {
       "command": "npx",
