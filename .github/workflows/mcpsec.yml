@@ -8,31 +8,17 @@ on:
 jobs:
   mcpsec:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Run MCPSEC Gatekeeper
+        uses: yuvrajgitwork/MCP-toolchain-security-GK@main
         with:
-          python-version: "3.12"
-
-      - name: Install deps (demo)
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Install MCPSEC (from GitHub)
-        run: |
-          pip install "git+https://github.com/yuvrajgitwork/MCP-toolchain-security-GK.git"
-
-      - name: Run MCPSEC (scan → apply → rescan)
+          config: data/mcp_insecure.json
+          format: auto
+          threshold: "30"
         env:
           MCPSEC_LLM_TOKEN: ${{ secrets.MCPSEC_LLM_TOKEN }}
-        run: |
-          python -m mcpsec.cli scan --config data/mcp_insecure.json --format auto --out out_ci_before
-          python -m mcpsec.cli scan --config data/mcp_insecure.json --format auto --out out_ci_apply --apply
-          python -m mcpsec.cli scan --config out_ci_apply/hardened_config.json --format auto --out out_ci_after
 
       - name: Upload reports
         if: always()
