@@ -5,7 +5,7 @@
       "args": ["-y", "@modelcontextprotocol/server-filesystem"],
       "capabilities": ["fs.read", "fs.write"],
       "auth": { "required": false }
-    },
+    }, 
     "sqlite": {
       "command": "npx",
       "args": ["-y", "mcp-sqlite"],
