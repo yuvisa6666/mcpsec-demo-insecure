@@ -1,20 +1,33 @@
 name: MCPSEC Demo Gatekeeper
 
 on:
-  pull_request:
   push:
     branches: [ main ]
+  pull_request:
 
 jobs:
   mcpsec:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Run MCPSEC Gatekeeper
-        uses: yuvrajgitwork/MCP-toolchain-security-GK@main
+      # Checkout the demo repo (contains config)
+      - name: Checkout demo repo
+        uses: actions/checkout@v4
         with:
-          config: data/mcp_insecure.json
+          path: demo
+
+      # Checkout MCPSEC repo (contains action.yml + mcpsec code)
+      - name: Checkout MCPSEC
+        uses: actions/checkout@v4
+        with:
+          repository: yuvrajgitwork/MCP-toolchain-security-GK
+          ref: main
+          path: mcpsec_src
+
+      # Run the composite action from the checked-out MCPSEC repo
+      - name: Run MCPSEC Gatekeeper
+        uses: ./mcpsec_src
+        with:
+          config: demo/data/mcp_insecure.json
           format: auto
           threshold: "30"
         env:
